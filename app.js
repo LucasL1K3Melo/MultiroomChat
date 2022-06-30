@@ -19,10 +19,13 @@ let server = app.listen(3000,'localhost', () => {
 // Socket está escutando a porta
 let io = require('socket.io').listen(server);
 
+
+app.set('io', io);
+
 // Cria conexão com Socket
 io.on('connection', function(socket){
 
-  console.log('Conexão realizada.')
+  console.log("Usuário se conectou.");
 
   socket.on('disconnect', function(){
     console.log("Usuário desconectou.")
