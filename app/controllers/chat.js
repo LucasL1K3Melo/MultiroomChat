@@ -1,4 +1,4 @@
-module.exports.iniciaChat = function(app, req, res){
+module.exports.iniciaChat = function(application, req, res){
 
     let dadosForm = req.body;
 
@@ -6,7 +6,7 @@ module.exports.iniciaChat = function(app, req, res){
     // Validação de usuário:
     // req.assert('apelido', 'Nome ou apelido é obrigatório.').notEmpty();
 
-    // REtorna os erros
+    // Retorna os erros
     let errors = req.validationErrors();
 
     if(errors){
@@ -14,7 +14,7 @@ module.exports.iniciaChat = function(app, req, res){
         return; //Interrompe o código
     }
 
-    app.get('io').emit('msgParaCliente','Test');
+    application.get('io').emit('msgParaCliente','Test');
 
     // Renderiza a página do chat:
     res.render("chat");
