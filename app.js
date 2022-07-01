@@ -4,7 +4,7 @@
  * Importing server configs.
  * 
 */
-let app = require('./config/server.js');
+var app = require('./config/server.js');
  
 /**
   * 
@@ -12,12 +12,12 @@ let app = require('./config/server.js');
   * Listener param.
   * 
 */
-let server = app.listen(3000,'localhost', () => {
-  console.log('[OK] Servidor Online: Porta 3000')
+var server = app.listen(8080,'localhost', () => {
+  console.log('[OK] Servidor Online: Porta 8080')
 });
 
 // Socket está escutando a porta
-let io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server);
 
 
 app.set('io', io);
@@ -30,4 +30,11 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log("Usuário desconectou.")
   });
+
+  socket.on('msgParaServidor', function(data){
+    socket.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
+  
+    socket.broadcast.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
+  });
+
 });

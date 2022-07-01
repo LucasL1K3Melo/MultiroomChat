@@ -72,12 +72,6 @@
             <div class="row conversa" id="conversa">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-
-					<div class="dialogo">
-						<h4>Admin</h4>
-						<p>Sim, com certeza.</p>
-					</div>
-
 				</div>
 				<div class="col-md-1"></div>
                 
@@ -109,16 +103,15 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container">
 				<div class="panel-body campo-mensagem">
-					<form>
-						<div class="col-md-12">
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Mensagem">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">></button>
-								</span>
-							</div>
+					<div class="col-md-12">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Mensagem" id="mensagem">
+							<input type="hidden" value="<%=dadisForm.apelido%>" id="apelido">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" id="enviar_mensagem">></button>
+							</span>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</nav>		
@@ -127,12 +120,30 @@
 		
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
-			let socket = io('http://localhost:3000');
+			var socket = io('http://localhost:8080');
 
-			socket.on('msgparaCliente', function(data){
-				alert(data)
+
+			$('#enviar_mensagem').click(function(){
+				socket.emit(
+					'msgParaServidor',
+					{ apelido: $('#apelido').val(), mensagem: $('#mensagem').val() }
+				);
+			});
+
+			socket.emit();
+
+			socket.on('msgParaCliente', function(data){
+				var html = '';
+
+				html += '<div class="dialogo">';
+					html += '<h4>' + data.apelido + '</h4>';
+					html += '<p>' + data.mensagem + '</p>'
+				html += '</div>'
+
+				// JQuery
+				$('#dialogos').append(html);
 			});
 		</script>
 	
-</body>
+	</body>
 </html>
