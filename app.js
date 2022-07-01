@@ -31,10 +31,29 @@ io.on('connection', function(socket){
     console.log("Usuário desconectou.")
   });
 
+  // Eventos de Dialogo:
   socket.on('msgParaServidor', function(data){
     socket.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
   
     socket.broadcast.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
+  
+    // Atualizar participantes:
+    socket.emit('participantesParaClientes', {apelido: data.apelido});
+  
+    socket.broadcast.emit('participantesParaClientes', {apelido: data.apelido});
+  
+    if(parseInt(data.apelido_atualizado_nos_clientes) == 0){
+      socket.emit( 
+          'participantesParaClientes',
+          {apelido: data.apelido}
+      );
+
+      socket.broadcast.emit(
+        'participantesParaClientes',
+        {apelido: data.apelido}
+      );
+    }
+
   });
 
 });
